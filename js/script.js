@@ -1,4 +1,6 @@
 var parser = {};
+// Return a list containing the DOM path leading to the html object containing
+// the phrase 'Taiwan'.
 parser.getTaiwanNode = function() {
   // TODO(Dada): Make this case insensitive.
   return $('*:contains("Taiwan")');
@@ -26,7 +28,7 @@ parser.matchOffending = function(text) {
 };
 parser.getOffendingNode = function() {
   var taiwanNode = parser.getTaiwanNode();
-  if (!taiwanNode) {
+  if (taiwanNode.length == 0) {
     return null;
   }
   if (parser.matchOffending(parser.getText(taiwanNode))) {
