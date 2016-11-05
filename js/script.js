@@ -95,7 +95,6 @@ function scrollIntoView (element, alignTop) {
 
 }
 
-var highlightText = function(){
   
 // Private methods.
 parser.getTaiwanNode_ = function() {
@@ -135,7 +134,11 @@ var highlightText = function() {
   parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
 
   // check if element in view, scroll in to view if not.
-  scrollIntoView(ele, true);
+
+  $(document).load(function(){
+    scrollIntoView(this, true);  
+  });
+  
 
   // fade in fade out calling each other for ever
   var fadeOut = function(el) {
@@ -170,7 +173,7 @@ var highlightText = function() {
 
 $(function() {
   var baseUrl = getBaseUrl(location.href);
-  //const cp = new ContactParser(baseUrl, $(document));
+  const cp = new ContactParser(baseUrl, $(document));
   var offendingNode = parser.getOffendingNode();
   if (offendingNode) {
     highlightText.call(offendingNode);
