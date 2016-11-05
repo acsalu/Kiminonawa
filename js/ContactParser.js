@@ -3,7 +3,7 @@
  */
 const patterns = {
   mailto: 'a[href^="mailto:"]',
-  contact: 'a:contains("Contact")'
+  contact: 'a:contains("Contact"), a:contains("About")'
 }
 
 class ContactParser {
