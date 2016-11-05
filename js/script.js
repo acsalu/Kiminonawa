@@ -15,6 +15,7 @@ parser.getOffendingNode = function() {
 
 
 function scrollIntoView (element, alignTop) {
+
     var document = element.ownerDocument;
     var origin = element, originRect = origin.getBoundingClientRect();
     var hasScroll = false;
@@ -134,9 +135,9 @@ var highlightText = function() {
   parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
 
   // check if element in view, scroll in to view if not.
-
-  $(document).load(function(){
-    scrollIntoView(this, true);  
+  var _ele = this;
+  $(document).ready(function(){
+    scrollIntoView(_ele, true);  
   });
   
 
