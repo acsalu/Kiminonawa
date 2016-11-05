@@ -1,6 +1,13 @@
 $(function() {
-	// Can access page DOM here
-    var baseUrl = getBaseUrl(location.href);
+
+  var baseUrl = getBaseUrl(location.href);
+  const cp = new ContactParser(baseUrl, $(document));
+
+  cp.findMailAddresses(function(mailAddresses) {
+    for (var i = 0; i < mailAddresses.length; ++i) {
+      console.log(mailAddresses[i]);
+    }
+  });
 });
 
 function getBaseUrl(origUrl) {
