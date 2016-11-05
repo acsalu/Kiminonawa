@@ -2,32 +2,31 @@ var parser = {};
 // Return the node containing the DOM path leading to the html object containing
 // offending pattern e.g. Taiwan, Province of China.
 parser.getOffendingNode = function() {
-  var taiwanNodePath = parser.getTaiwanNode_();
-  if (taiwanNodePath.length == 0) {
-    return null;
-  }
-  var taiwanNode = taiwanNodePath[taiwanNodePath.length - 1];
-  if (parser.matchOffending_(taiwanNode.innerHTML)) {
-    return taiwanNode;
-  }
-  return null;
+  return parser.traverse_(document);
 };
 
 // Private methods.
-parser.getTaiwanNode_ = function() {
-  var node = $('*:contains("Taiwan")');
-  if (node) {
-    return node;
+parser.traverse_ = function(node) {
+  var text = node.text || node.textContent;
+  if (text) {
+    if (node.tagName != 'TITLE' &&
+        node.tagName != 'SCRIPT' &&
+        parser.matchOffending_(text)) {
+      return node;
+    }
   }
-  return $('*:contains("taiwan")');
-};
-parser.getText_ = function(node) {
-  var lastNode = node.last();
-  return lastNode[0].innerHTML;
+  for (var x = 0; x < node.children.length; ++x) {
+    var child = parser.traverse_(node.children[x]);
+    if (child) {
+      return child;
+    }
+  }
+  return null;
 };
 parser.patterns_ = [
   new RegExp('taiwan\\s*,?\\s*province\\s*of\\s*china', 'i'),
   new RegExp('taiwan\\s*,?\\s*prc', 'i'),
+  new RegExp('chinese\\s*,?\\s*taipei', 'i'),
   new RegExp('taiwan\\s*,?\\s*china', 'i'),
   new RegExp('china\\s*,?\\s*taiwan', 'i')
 ];
@@ -82,12 +81,13 @@ var highlightText = function() {
 
 $(function() {
   var baseUrl = getBaseUrl(location.href);
-  //const cp = new ContactParser(baseUrl, $(document));
   var offendingNode = parser.getOffendingNode();
   if (offendingNode) {
     highlightText.call(offendingNode);
+    alert('offending');
   }
   if (offendingNode !== null) {
+    const cp = new ContactParser(baseUrl, $(document));
     cp.findMailAddresses(function(mailAddresses) {
       for (var i = 0; i < mailAddresses.length; ++i) {
         console.log(mailAddresses[i]);
