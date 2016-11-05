@@ -1,60 +1,17 @@
 var parser = {};
-// Return a list containing the DOM path leading to the html object containing
-// the phrase 'Taiwan'.
+// Return the node containing the DOM path leading to the html object containing
+// offending pattern e.g. Taiwan, Province of China.
 parser.getOffendingNode = function() {
-  var taiwanNode = parser.getTaiwanNode_();
-  if (taiwanNode.length == 0) {
+  var taiwanNodePath = parser.getTaiwanNode_();
+  if (taiwanNodePath.length == 0) {
     return null;
   }
-  if (parser.matchOffending_(parser.getText_(taiwanNode))) {
+  var taiwanNode = taiwanNodePath[taiwanNodePath.length - 1];
+  if (parser.matchOffending_(taiwanNode.innerHTML)) {
     return taiwanNode;
   }
   return null;
 };
-
-var highlightText = function(){
-  
-  // add style to element
-  this.style.textDecoration = "line-through";
-
-  // add style to parent element
-  var parent = this.parentElement;
-  parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
-
-
-  // fade in fade out calling each other for ever
-  var fadeOut = function(el){
-    el.style.opacity = 1;
-
-    (function fade() {
-      if ((el.style.opacity -= .04) < 0) {
-        fadeIn(el);
-      } else {
-        requestAnimationFrame(fade);
-      }
-    })();
-
-  }
-
-  var fadeIn = function(el){
-    el.style.opacity = 0;
-
-    (function fade() {
-      var val = parseFloat(el.style.opacity);
-      if (!((val += .04) > 1)) {
-        el.style.opacity = val;
-        requestAnimationFrame(fade);
-      }else{
-        fadeOut(el);
-      }
-    })();
-  }
-
-  // start animation of fade in and fade out
-  fadeOut(parent);
-
-}
-
 
 // Private methods.
 parser.getTaiwanNode_ = function() {
@@ -84,11 +41,52 @@ parser.matchOffending_ = function(text) {
   return false;
 };
 
-$(function() {
+var highlightText = function() {
+  // add style to element
+  this.style.textDecoration = "line-through";
 
+  // add style to parent element
+  var parent = this.parentElement;
+  parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
+
+  // fade in fade out calling each other for ever
+  var fadeOut = function(el) {
+    el.style.opacity = 1;
+
+    (function fade() {
+      if ((el.style.opacity -= .04) < 0) {
+        fadeIn(el);
+      } else {
+        requestAnimationFrame(fade);
+      }
+    })();
+  };
+
+  var fadeIn = function(el) {
+    el.style.opacity = 0;
+
+    (function fade() {
+      var val = parseFloat(el.style.opacity);
+      if (!((val += .04) > 1)) {
+        el.style.opacity = val;
+        requestAnimationFrame(fade);
+      } else {
+        fadeOut(el);
+      }
+    })();
+  };
+
+  // start animation of fade in and fade out
+  fadeOut(parent);
+};
+
+$(function() {
   var baseUrl = getBaseUrl(location.href);
-  const cp = new ContactParser(baseUrl, $(document));
+  //const cp = new ContactParser(baseUrl, $(document));
   var offendingNode = parser.getOffendingNode();
+  if (offendingNode) {
+    highlightText.call(offendingNode);
+  }
   if (offendingNode !== null) {
     cp.findMailAddresses(function(mailAddresses) {
       for (var i = 0; i < mailAddresses.length; ++i) {
@@ -99,8 +97,8 @@ $(function() {
 });
 
 function getBaseUrl(origUrl) {
-    var pathArray = origUrl.split('/');
-    var protocol = pathArray[0];
-    var host = pathArray[2];
-    return protocol + '//' + host;
+  var pathArray = origUrl.split('/');
+  var protocol = pathArray[0];
+  var host = pathArray[2];
+  return protocol + '//' + host;
 }
