@@ -13,50 +13,6 @@ parser.getOffendingNode = function() {
   return null;
 };
 
-var highlightText = function(){
-  
-  // add style to element
-  this.style.textDecoration = "line-through";
-
-  // add style to parent element
-  var parent = this.parentElement;
-  parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
-
-
-  // fade in fade out calling each other for ever
-  var fadeOut = function(el){
-    el.style.opacity = 1;
-
-    (function fade() {
-      if ((el.style.opacity -= .04) < 0) {
-        fadeIn(el);
-      } else {
-        requestAnimationFrame(fade);
-      }
-    })();
-
-  }
-
-  var fadeIn = function(el){
-    el.style.opacity = 0;
-
-    (function fade() {
-      var val = parseFloat(el.style.opacity);
-      if (!((val += .04) > 1)) {
-        el.style.opacity = val;
-        requestAnimationFrame(fade);
-      }else{
-        fadeOut(el);
-      }
-    })();
-  }
-
-  // start animation of fade in and fade out
-  fadeOut(parent);
-
-}
-
-
 // Private methods.
 parser.getTaiwanNode_ = function() {
   var node = $('*:contains("Taiwan")');
@@ -85,11 +41,52 @@ parser.matchOffending_ = function(text) {
   return false;
 };
 
-$(function() {
+var highlightText = function() {
+  // add style to element
+  this.style.textDecoration = "line-through";
 
+  // add style to parent element
+  var parent = this.parentElement;
+  parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
+
+  // fade in fade out calling each other for ever
+  var fadeOut = function(el) {
+    el.style.opacity = 1;
+
+    (function fade() {
+      if ((el.style.opacity -= .04) < 0) {
+        fadeIn(el);
+      } else {
+        requestAnimationFrame(fade);
+      }
+    })();
+  };
+
+  var fadeIn = function(el) {
+    el.style.opacity = 0;
+
+    (function fade() {
+      var val = parseFloat(el.style.opacity);
+      if (!((val += .04) > 1)) {
+        el.style.opacity = val;
+        requestAnimationFrame(fade);
+      } else {
+        fadeOut(el);
+      }
+    })();
+  };
+
+  // start animation of fade in and fade out
+  fadeOut(parent);
+};
+
+$(function() {
   var baseUrl = getBaseUrl(location.href);
-  const cp = new ContactParser(baseUrl, $(document));
+  //const cp = new ContactParser(baseUrl, $(document));
   var offendingNode = parser.getOffendingNode();
+  if (offendingNode) {
+    highlightText.call(offendingNode);
+  }
   if (offendingNode !== null) {
     cp.findMailAddresses(function(mailAddresses) {
       for (var i = 0; i < mailAddresses.length; ++i) {
@@ -100,8 +97,8 @@ $(function() {
 });
 
 function getBaseUrl(origUrl) {
-    var pathArray = origUrl.split('/');
-    var protocol = pathArray[0];
-    var host = pathArray[2];
-    return protocol + '//' + host;
+  var pathArray = origUrl.split('/');
+  var protocol = pathArray[0];
+  var host = pathArray[2];
+  return protocol + '//' + host;
 }
