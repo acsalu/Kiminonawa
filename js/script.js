@@ -12,6 +12,88 @@ parser.getOffendingNode = function() {
   return null;
 };
 
+
+function scrollIntoView (element, alignTop) {
+    var document = element.ownerDocument;
+    var origin = element, originRect = origin.getBoundingClientRect();
+    var hasScroll = false;
+    var documentScroll = document.scrollingElement;
+
+    while (element) {
+
+        if (element == document.body) {
+            element = documentScroll;
+        } else {
+            element = element.parentNode;
+        }
+
+        if (element) {
+            var hasScrollbar = (!element.clientHeight) ? false : element.scrollHeight > element.clientHeight;
+
+            if (!hasScrollbar) {
+                if (element == documentScroll) {
+                    element = null;
+                }
+                continue;
+            }
+
+            var rects;
+            if (element == documentScroll) {
+                rects = {
+                    left : 0,
+                    top : 0
+                };
+            } else {
+                rects = element.getBoundingClientRect();
+            }
+
+            // check that elementRect is in rects
+            var deltaLeft = originRect.left - (rects.left + (parseInt(element.style.borderLeftWidth, 10) | 0));
+            var deltaRight = originRect.right
+                            - (rects.left + element.clientWidth + (parseInt(element.style.borderLeftWidth, 10) | 0));
+            var deltaTop = originRect.top - (rects.top + (parseInt(element.style.borderTopWidth, 10) | 0));
+            var deltaBottom = originRect.bottom
+                            - (rects.top + element.clientHeight + (parseInt(element.style.borderTopWidth, 10) | 0));
+
+            // adjust display depending on deltas
+            if (deltaLeft < 0) {
+                element.scrollLeft += deltaLeft;
+            } else if (deltaRight > 0) {
+                element.scrollLeft += deltaRight;
+            }
+
+            if (alignTop === true && !hasScroll) {
+                element.scrollTop += deltaTop;
+            } else if (alignTop === false && !hasScroll) {
+                element.scrollTop += deltaBottom;
+            } else {
+                if (deltaTop < 0) {
+                    element.scrollTop += deltaTop;
+                } else if (deltaBottom > 0) {
+                    element.scrollTop += deltaBottom;
+                }
+            }
+
+            if (element == documentScroll) {
+                element = null;
+            } else {
+                // readjust element position after scrolls, and check if vertical scroll has changed.
+                // this is required to perform only one alignment
+                var nextRect = origin.getBoundingClientRect();
+                if (nextRect.top != originRect.top) {
+                    hasScroll = true;
+                }
+                originRect = nextRect;
+            }
+        }
+    }
+
+
+    // put the element into middle of the view
+    document.body.scrollTop -= screen.height/2;
+
+}
+
 var highlightText = function(){
   
   // add style to element
@@ -20,6 +102,9 @@ var highlightText = function(){
   // add style to parent element
   var parent = this.parentElement;
   parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
+
+  // check if element in view, scroll in to view if not.
+  scrollIntoView(ele, true);
 
 
   // fade in fade out calling each other for ever
