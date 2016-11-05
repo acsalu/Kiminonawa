@@ -1,12 +1,13 @@
 var parser = {};
-// Return a list containing the DOM path leading to the html object containing
-// the phrase 'Taiwan'.
+// Return the node containing the DOM path leading to the html object containing
+// offending pattern e.g. Taiwan, Province of China.
 parser.getOffendingNode = function() {
-  var taiwanNode = parser.getTaiwanNode_();
-  if (taiwanNode.length == 0) {
+  var taiwanNodePath = parser.getTaiwanNode_();
+  if (taiwanNodePath.length == 0) {
     return null;
   }
-  if (parser.matchOffending_(parser.getText_(taiwanNode))) {
+  var taiwanNode = taiwanNodePath[taiwanNodePath.length - 1];
+  if (parser.matchOffending_(taiwanNode.innerHTML)) {
     return taiwanNode;
   }
   return null;
