@@ -3,9 +3,18 @@
   <head>
   <link rel="stylesheet" href="css/style.css">
   <!-- <link rel="stylesheet" href="css/chrome-bootstrap.css"> -->
-    <!-- <script src="js/popup.js"></script> -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popup.js"></script>
   </head>
+  <script src="js/background.js"></script>
   <body class="chrome-bootstrap">
+    <div id="steps">
+        <ul id="steps-list">
+            <li class="step"><img src="" alt=""></li>
+            <li class="step"><img src="" alt=""></li>
+            <li class="step"><img src="" alt=""></li>
+        </ul>
+    </div>
     <form class="report-form">
       <label for="name">Name:</label>
       <input type="text" id="name" name="user_name" />
@@ -15,5 +24,6 @@
       <textarea id="msg" name="user_message"></textarea>
       <button id="report-btn">Report</button>
     </form>
+    <button id="screenshot-btn">Capture Screenshot</button>
   </body>
 </html>
