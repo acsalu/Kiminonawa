@@ -1,4 +1,7 @@
-# Kiminonawa
+# 台灣正名器
+
+## 懶人包
+請見[g0v網站](https://g0v.hackpad.com/vPut9gWRsWH)
 
 ## Develop
 1. Go to [chrome://extensions/]([chrome://extensions/])
