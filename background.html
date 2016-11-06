@@ -1,19 +1,57 @@
 <!doctype html>
 <html>
   <head>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <!-- <link rel="stylesheet" href="css/chrome-bootstrap.css"> -->
     <!-- <script src="js/popup.js"></script> -->
+  <!-- <base href="http://"> -->
   </head>
   <body class="chrome-bootstrap">
-    <form class="report-form">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="user_name" />
-      <label for="mail">Email:</label>
-      <input type="email" id="mail" name="user_mail" />
-      <label for="msg">Message:</label>
-      <textarea id="msg" name="user_message"></textarea>
-      <button id="report-btn">Report</button>
+    <img id="logo" src="../imgs/nameIsTaiwanLogo/name-is-taiwan-l-o-g-o.png">
+    <p id="description">本網頁含有誤植台灣國籍的資訊</p>
+
+    <form>
+      <div>
+        <label id="checkbox"><input id="cbox" type="checkbox" name="check" value="reported">已檢舉，不要再顯示。</label>
+      </div>
     </form>
+
+    <div class="tag">STEPS</div>
+    <div class="step-item">
+      <img src="../imgs/icon-check/i-c-o-n-1.png">
+      <img src="../imgs/icon-preview/i-c-o-n-2.png">
+      <img src="../imgs/icon-confirm/i-c-o-n-3.png">
+    </div>
+    <div class="step-item">
+      <p>1.確認誤植</p>
+      <p>2.預覽檢舉<br>  郵件範例</p>
+      <p>3.確定檢舉</p>
+    </div>
+
+    <div class="tag">EMAIL TEMPLATE</div>
+    <p id="email-address">Admin@gmail.com</p>
+    <div id="email-content">
+      <p id="email-content-p">
+      As a Taiwanese citizen, I write to you today about an issue of concern to me and my country.
+
+While utilizing your website, I came across the designation “Taiwan, Province of China”.
+
+Taiwan is not a province of China. It is a sovereign independent country. Americans traveling to Taiwan are unable to apply for a visa for Taiwan at the Chinese Embassy. Americans traveling to China can not receive a visa for China at the Taiwan embassy.
+
+In 1996, the U.S. State Department released an unclassified memorandum providing guidelines on U.S. relations with Taiwan. The memorandum states that, since the U.S. has no diplomatic relations with the ROC, U.S. officials need to refer to Taiwan as "Taiwan." William J. Burns, Executive Secretary of the State Department at the time wrote in the memo that, terminology used by all state departments and agencies should be "[c]onsistent with the unofficial nature of U.S.‑Taiwan ties. We refer to Taiwan simply as Taiwan."
+
+We would like to reiterate that Amtrak, the US Postal Service, the U.S. State Department and other federal agencies all refer to Taiwan simply as "Taiwan." And so do many other American companies and businesses after we approached them.
+
+It is the sense of all 53 FAPA chapters of Taiwanese Americans here in the U.S. that the “Province of China” designation gravely infringes upon the sovereignty and dignity we enjoy as an independent nation.
+
+I hereby request you to correct the terminology in reference to Taiwan and stop referring to Taiwan as a “Province of China.”
+
+I thank you for your consideration and look forward to hearing from you.
+      </p>
+    </div>
+
+    <button id="report-button" type="button">我要檢舉 REPORT THIS PAGE</button>
+
   </body>
 </html>
