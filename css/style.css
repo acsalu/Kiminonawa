@@ -1,3 +1,146 @@
-.report-form {
-  padding: 15px 10px;
+.chrome-bootstrap {
+  width: 320px;
+  height: 598px;
+}
+
+#logo {
+  width: 161px;
+  height: 61px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#description {
+  font-family: ".PingFang SC", sans-serif;
+  font-size: 16px;
+  color: #000000;
+  margin-top: 1px;
+  text-align: center;
+}
+
+#checkbox {
+  width: 146px;
+  height: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 14px;
+  font-family: ".PingFang SC", sans-serif;
+}
+
+#cbox {
+  width: 16px;
+  height: 16px;
+  border: solid 2px #d11212;
+  margin-left: auto;
+  margin-right: 10px;
+  vertical-align: middle;
+  position: relative;
+  *overflow: hidden;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  -o-appearance:none;
+  outline: none;
+}
+
+div.tag {
+  height: 20px;
+  line-height: 20px;
+  background: #efbe53;
+  color: #ffffff;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  margin-top: 18px;
+  margin-bottom: 9px;
+  margin-left: -8px;
+  padding-left: 21px;
+  padding-right: 11px;
+  display: inline-block;
+}
+
+div.step-item {
+  text-align: justify;
+  margin-left: 23px;
+  margin-right: 25px;
+}
+
+div.step-item img {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+}
+
+div.step-item p {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+div.step-item:after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+#emails {
+  width: 147px;
+  height: 20px;
+  background: #efbe53;
+  color: white;
+  text-align: center;
+  margin-top: 16px;
+}
+
+#cbox {
+  border: 2px solid #d11212;
+}
+
+#email-addresses {
+  width: 300px;
+  height: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  line-height: 30px;
+  border: 1px solid #dadada;
+  font-size: 14px;
+  padding-left: 9px;
+  font-family: "Open Sans", sans-serif;
+}
+
+#email-content {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 300px;
+  height: 168px;
+  overflow-y: scroll;
+  border: 1px solid #dadada;
+}
+
+#email-content-p {
+  float: left;
+  width: 249px;
+  margin-left: 9px;
+  margin-right: 42px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #000000;
+}
+
+#report-button {
+  font-size: 12px;
+  color: #ffffff;
+  background: #d11212;
+  border: none;
+  width: 278px;
+  height: 50px;
+  border-radius: 47px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  line-height:50px;
 }

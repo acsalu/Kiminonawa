@@ -3,7 +3,7 @@
  */
 const patterns = {
   mailto: 'a[href^="mailto:"]',
-  contact: 'a:contains("Contact"), a:contains("About")'
+  contact: 'a:contains("Contact")'
 }
 
 class ContactParser {
@@ -22,13 +22,20 @@ class ContactParser {
 
   findMailAddresses(callback) {
     var mailAddresses = ContactParser._parseMailAddresses(this.$document);
-    if (mailAddresses.length > 0) { callback(mailAddresses); return; }
+    if (mailAddresses.length > 0) {
+      console.log('found contact on this page');
+      callback(mailAddresses);
+      return;
+    }
     var contactUrl = ContactParser._parseContactUrl(
         $($.get({url: this.baseUrl, async: false}).responseText));
     if (contactUrl) {
       contactUrl = this.baseUrl + '/' + contactUrl;
+      console.log(contactUrl);
       this.$iframe.on('load', function() {
+        console.log('iframe loaded');
         mailAddresses = ContactParser._parseMailAddresses($(this).contents());
+        console.log(mailAddresses.length);
         callback(mailAddresses);
         return;
       });

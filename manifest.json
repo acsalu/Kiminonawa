@@ -4,12 +4,18 @@
   "manifest_version": 2,
   "description": "",
   "background": {
-	  "page": "background.html"
+      "scripts": [
+        "./js/background.js"
+      ],
+      "persistent": false
   },
   "content_scripts": [
   	{
   		"matches": ["http://*/*", "https://*/*"],
-  		"js": ["./js/jquery-3.1.1.min.js", "./js/ContactParser.js", "./js/script.js"],
+  		"js": ["./js/jquery-3.1.1.min.js",
+          "./js/ContactParser.js",
+          "./js/content.js"
+        ],
   		"css": ["./css/style.css"],	
   		"run_at": "document_end"
   	}
@@ -18,10 +24,12 @@
   ],
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "background.html"
+    "default_popup": "popup.html"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "activeTab",
+    "<all_urls>"
   ]
 }
 
