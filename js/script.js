@@ -90,7 +90,6 @@ function scrollIntoView (element, alignTop) {
         }
     }
 
-
     // put the element into middle of the view
     document.body.scrollTop -= screen.height/2;
 
@@ -109,12 +108,14 @@ parser.getText_ = function(node) {
   var lastNode = node.last();
   return lastNode[0].innerHTML;
 };
+
 parser.patterns_ = [
   new RegExp('taiwan\\s*,?\\s*province\\s*of\\s*china', 'i'),
   new RegExp('taiwan\\s*,?\\s*prc', 'i'),
   new RegExp('taiwan\\s*,?\\s*china', 'i'),
   new RegExp('china\\s*,?\\s*taiwan', 'i')
 ];
+
 parser.matchOffending_ = function(text) {
   for (var x = 0; x < parser.patterns_.length; ++x) {
     var re = parser.patterns_[x];
@@ -130,17 +131,27 @@ var highlightText = function() {
   // add style to element
   this.style.textDecoration = "line-through";
 
+  // check if the found pattern is in a long paragraph
+  var parent_text = $(this.parentNode).text();
+  var parent;
+  if (parent_text.length > 100){
+    this.parentNode.innerHTML = this.parentNode.innerHTML.replace( this.outerHTML,
+      "<span class='offending-text'>" + this.outerHTML + "</span>" );
+    parent = document.getElementsByClassName("offending-text")[0];
+  }else{
+    parent = this.parentNode;
+  }
+
   // add style to parent element
-  var parent = this.parentElement;
   parent.style.cssText = 'border: 3;border-style: solid; border-color: #d11212; text-decoration: line-through;';
 
-  // check if element in view, scroll in to view if not.
-  var _ele = this;
+  // scroll element into view
+  // var _ele = this;
+
   $(document).ready(function(){
-    scrollIntoView(_ele, true);  
+    scrollIntoView(parent, true);
   });
   
-
   // fade in fade out calling each other for ever
   var fadeOut = function(el) {
     el.style.opacity = 1;
