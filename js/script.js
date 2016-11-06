@@ -192,7 +192,34 @@ var highlightText = function() {
   fadeOut(parent);
 };
 
+var whitelist = [
+  'www.google.com',
+  'www.facebook.com'
+];
+
+chrome.runtime.onMessage.addListener(function (msg, sender) {
+  if ((msg.from === 'background') && (msg.subject === 'HostNameAck')) {
+    console.log('Received ACK from background.');
+    if (msg.visited === true) {
+      console.log('This website has been visited');
+    } else {
+      console.log('This website has not been visited');
+    }
+  }
+});
+
 $(function() {
+  var hostName = window.location.host;
+  if (whitelist.indexOf(hostName) >= 0) {
+    console.log('Website is whitelisted: ' + hostName);
+    return;
+  }
+  chrome.runtime.sendMessage({
+    from: 'content',
+    subject: 'HostName',
+    text: hostName
+  });
+
   var baseUrl = getBaseUrl(location.href);
   var offendingNode = parser.getOffendingNode();
   if (offendingNode) {
