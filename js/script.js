@@ -101,14 +101,15 @@ parser.traverse_ = function(node) {
     }
   }
 
-  if (node.tagName == 'SCRIPT' ||
-      node.tagName == 'TITLE') {
+  if (node.nodeName == 'SCRIPT' ||
+      node.nodeName == 'TITLE') {
     return null;
   }
   var text = parser.getText_(node);
   if (text) {
     var offendingText = parser.matchOffending_(text);
     if (offendingText) {
+      console.log('Tag name: ' + node.nodeName);
       console.log('Offending text: ' + offendingText);
       return node;
     }
@@ -116,11 +117,14 @@ parser.traverse_ = function(node) {
   return null;
 };
 parser.getText_ = function(node) {
-  var text = node.text;
-  if (node.tagName == 'H2') {
+  if (node.nodeName[0] == 'H' && node.nodeName.length == 2) {
     text = node.textContent;
-  } else if (node.tagName == 'A') {
+  } else if (node.nodeName == 'A') {
     text = node.innerText;
+  } else if (node.nodeName == 'STRONG' || node.nodeName == 'P') {
+    text = node.textContent;
+  } else {
+    text = node.text;
   }
   return text;
 };
@@ -191,9 +195,9 @@ var highlightText = function() {
 $(function() {
   var baseUrl = getBaseUrl(location.href);
   var offendingNode = parser.getOffendingNode();
-  var offendingText = parser.getOffendingText(offendingNode);
   if (offendingNode) {
     highlightText.call(offendingNode);
+    var offendingText = parser.getOffendingText(offendingNode);
   }
   if (offendingNode !== null) {
     const cp = new ContactParser(baseUrl, $(document));
