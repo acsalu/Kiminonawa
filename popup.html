@@ -4,11 +4,12 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <!-- <link rel="stylesheet" href="css/chrome-bootstrap.css"> -->
-    <!-- <script src="js/popup.js"></script> -->
-  <!-- <base href="http://"> -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/popup.js"></script>
   </head>
+  <script src="js/background.js"></script>
   <body class="chrome-bootstrap">
-    <img id="logo" src="../imgs/nameIsTaiwanLogo/name-is-taiwan-l-o-g-o.png">
+    <img id="logo" src="../img/nameIsTaiwanLogo/name-is-taiwan-l-o-g-o.png">
     <p id="description">本網頁含有誤植台灣國籍的資訊</p>
 
     <form>
@@ -19,9 +20,9 @@
 
     <div class="tag">STEPS</div>
     <div class="step-item">
-      <img src="../imgs/icon-check/i-c-o-n-1.png">
-      <img src="../imgs/icon-preview/i-c-o-n-2.png">
-      <img src="../imgs/icon-confirm/i-c-o-n-3.png">
+      <img src="../img/icon-check/i-c-o-n-1.png">
+      <img src="../img/icon-preview/i-c-o-n-2.png">
+      <img src="../img/icon-confirm/i-c-o-n-3.png">
     </div>
     <div class="step-item">
       <p>1.確認誤植</p>
@@ -53,5 +54,6 @@ I thank you for your consideration and look forward to hearing from you.
 
     <button id="report-button" type="button">我要檢舉 REPORT THIS PAGE</button>
 
+    <button id="screenshot-btn">Capture Screenshot</button>
   </body>
 </html>
