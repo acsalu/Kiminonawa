@@ -89,6 +89,9 @@ var parser = {};
 parser.getOffendingNode = function() {
   return parser.traverse_(document);
 };
+parser.getOffendingText = function(node) {
+  return parser.matchOffending_(parser.getText_(node));
+};
 // Private methods.
 parser.traverse_ = function(node) {
   for (var x = 0; x < node.children.length; ++x) {
@@ -102,19 +105,24 @@ parser.traverse_ = function(node) {
       node.tagName == 'TITLE') {
     return null;
   }
+  var text = parser.getText_(node);
+  if (text) {
+    var offendingText = parser.matchOffending_(text);
+    if (offendingText) {
+      console.log('Offending text: ' + offendingText);
+      return node;
+    }
+  }
+  return null;
+};
+parser.getText_ = function(node) {
   var text = node.text;
   if (node.tagName == 'H2') {
     text = node.textContent;
   } else if (node.tagName == 'A') {
     text = node.innerText;
   }
-  if (text) {
-    if (parser.matchOffending_(text)) {
-      console.log('Offending text: ' + text);
-      return node;
-    }
-  }
-  return null;
+  return text;
 };
 parser.patterns_ = [
   new RegExp('taiwan\\s*,?\\s*province\\s*of\\s*china', 'i'),
@@ -183,6 +191,7 @@ var highlightText = function() {
 $(function() {
   var baseUrl = getBaseUrl(location.href);
   var offendingNode = parser.getOffendingNode();
+  var offendingText = parser.getOffendingText(offendingNode);
   if (offendingNode) {
     highlightText.call(offendingNode);
   }
