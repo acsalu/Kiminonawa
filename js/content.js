@@ -211,13 +211,17 @@ $(function() {
   var offendingText = parser.getOffendingText(offendingNode);
   if (offendingNode) {
     highlightText.call(offendingNode, offendingText);
-  }
-  if (offendingNode !== null) {
     const cp = new ContactParser(baseUrl, $(document));
     cp.findMailAddresses(function(mailAddresses) {
       for (var i = 0; i < mailAddresses.length; ++i) {
         console.log(mailAddresses[i]);
       }
+      chrome.runtime.sendMessage({
+        from:    'content',
+        subject: 'mailAddresses',
+        data: mailAddresses
+      });
+
     });
   }
 });

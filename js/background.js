@@ -84,3 +84,13 @@ function upload(dataUri) {
   };
   xhr.send(fd);
 }
+
+function sendEmail(address, content) {
+  address += "?subject=Name for Taiwan";
+  address += ("&body=" + content);
+  chrome.tabs.create({url: address}, function (tab) {
+    setTimeout(function () {
+      chrome.tabs.remove(tab.id);
+    }, 500);
+  });
+}
