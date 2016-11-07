@@ -1,5 +1,7 @@
 # 台灣正名器
 
+![Imgur](http://i.imgur.com/ChFZYtC.jpg)
+
 ## 懶人包
 請見[g0v網站](https://g0v.hackpad.com/vPut9gWRsWH)
 
