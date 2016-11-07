@@ -106,14 +106,15 @@ parser.traverse_ = function(node) {
     }
   }
 
-  if (node.tagName == 'SCRIPT' ||
-      node.tagName == 'TITLE') {
+  if (node.nodeName == 'SCRIPT' ||
+      node.nodeName == 'TITLE') {
     return null;
   }
   var text = parser.getText_(node);
   if (text) {
     var offendingText = parser.matchOffending_(text);
     if (offendingText) {
+      console.log('Tag name: ' + node.nodeName);
       console.log('Offending text: ' + offendingText);
       return node;
     }
@@ -121,11 +122,14 @@ parser.traverse_ = function(node) {
   return null;
 };
 parser.getText_ = function(node) {
-  var text = node.text;
-  if (node.tagName == 'H2') {
+  if (node.nodeName[0] == 'H' && node.nodeName.length == 2) {
     text = node.textContent;
-  } else if (node.tagName == 'A') {
+  } else if (node.nodeName == 'A') {
     text = node.innerText;
+  } else if (node.nodeName == 'STRONG' || node.nodeName == 'P') {
+    text = node.textContent;
+  } else {
+    text = node.text;
   }
   return text;
 };
@@ -205,12 +209,40 @@ var highlightText = function(highlightText) {
   fadeOut(parent);
 };
 
+var whitelist = [
+  'www.google.com',
+  'www.facebook.com'
+];
+
+chrome.runtime.onMessage.addListener(function (msg, sender) {
+  if ((msg.from === 'background') && (msg.subject === 'HostNameAck')) {
+    console.log('Received ACK from background.');
+    if (msg.visited === true) {
+      console.log('This website has been visited');
+    } else {
+      console.log('This website has not been visited');
+    }
+  }
+});
+
 $(function() {
+  var hostName = window.location.host;
+  if (whitelist.indexOf(hostName) >= 0) {
+    console.log('Website is whitelisted: ' + hostName);
+    return;
+  }
+  chrome.runtime.sendMessage({
+    from: 'content',
+    subject: 'HostName',
+    text: hostName
+  });
+
   var baseUrl = getBaseUrl(location.href);
   var offendingNode = parser.getOffendingNode();
-  var offendingText = parser.getOffendingText(offendingNode);
-  if (offendingNode) {
+  if (offendingNode !== null) {
+    var offendingText = parser.getOffendingText(offendingNode);
     highlightText.call(offendingNode, offendingText);
+
     const cp = new ContactParser(baseUrl, $(document));
     cp.findMailAddresses(function(mailAddresses) {
       for (var i = 0; i < mailAddresses.length; ++i) {
