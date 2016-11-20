@@ -92,7 +92,12 @@ var parser = {};
 // Return the node containing the DOM path leading to the html object containing
 // offending pattern e.g. Taiwan, Province of China.
 parser.getOffendingNode = function() {
-  return parser.traverse_(document);
+  var crawlerPromise = new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      resolve(parser.traverse_(document.body));
+    }, 3000)
+  })
+  return crawlerPromise;
 };
 parser.getOffendingText = function(node) {
   return parser.matchOffending_(parser.getText_(node));
@@ -100,9 +105,9 @@ parser.getOffendingText = function(node) {
 // Private methods.
 parser.traverse_ = function(node) {
   for (var x = 0; x < node.children.length; ++x) {
-    var child = parser.traverse_(node.children[x]);
-    if (child) {
-      return child;
+    var offendingChildNode = parser.traverse_(node.children[x]);
+    if (offendingChildNode) {
+      return offendingChildNode;
     }
   }
 
@@ -122,9 +127,13 @@ parser.traverse_ = function(node) {
   return null;
 };
 parser.getText_ = function(node) {
+  if (!node) {
+    return '';
+  }
+  var text;
   if (node.nodeName[0] == 'H' && node.nodeName.length == 2) {
     text = node.textContent;
-  } else if (node.nodeName == 'A') {
+  } else if (node.nodeName == 'A' || node.nodeName == 'SPAN') {
     text = node.innerText;
   } else if (node.nodeName == 'STRONG' || node.nodeName == 'P') {
     text = node.textContent;
@@ -137,6 +146,7 @@ parser.getText_ = function(node) {
 parser.patterns_ = [
   new RegExp('taiwan\\s*,?\\s*province\\s*of\\s*china', 'i'),
   new RegExp('taiwan\\s*,?\\s*prc', 'i'),
+  new RegExp('taiwan\\s*,?\\s*china', 'i'),
   new RegExp('chinese\\s*,?\\s*taipei', 'i'),
   new RegExp('taiwan\\s*,?\\s*china', 'i'),
   new RegExp('china\\s*,?\\s*taiwan', 'i')
@@ -238,24 +248,26 @@ $(function() {
   });
 
   var baseUrl = getBaseUrl(location.href);
-  var offendingNode = parser.getOffendingNode();
-  if (offendingNode !== null) {
-    var offendingText = parser.getOffendingText(offendingNode);
-    highlightText.call(offendingNode, offendingText);
+  parser.getOffendingNode()
+  .then(offendingNode => {
+    if (offendingNode !== null) {
+      var offendingText = parser.getOffendingText(offendingNode);
+      highlightText.call(offendingNode, offendingText);
 
-    const cp = new ContactParser(baseUrl, $(document));
-    cp.findMailAddresses(function(mailAddresses) {
-      for (var i = 0; i < mailAddresses.length; ++i) {
-        console.log(mailAddresses[i]);
-      }
-      chrome.runtime.sendMessage({
-        from:    'content',
-        subject: 'mailAddresses',
-        data: mailAddresses
+      const cp = new ContactParser(baseUrl, $(document));
+      cp.findMailAddresses(function(mailAddresses) {
+        for (var i = 0; i < mailAddresses.length; ++i) {
+          console.log(mailAddresses[i]);
+        }
+        chrome.runtime.sendMessage({
+          from:    'content',
+          subject: 'mailAddresses',
+          data: mailAddresses
+        });
+
       });
-
-    });
-  }
+    }}
+  );
 });
 
 function getBaseUrl(origUrl) {
