@@ -146,7 +146,6 @@ parser.getText_ = function(node) {
 parser.patterns_ = [
   new RegExp('taiwan\\s*,?\\s*province\\s*of\\s*china', 'i'),
   new RegExp('taiwan\\s*,?\\s*prc', 'i'),
-  new RegExp('taiwan\\s*,?\\s*china', 'i'),
   new RegExp('chinese\\s*,?\\s*taipei', 'i'),
   new RegExp('taiwan\\s*,?\\s*china', 'i'),
   new RegExp('china\\s*,?\\s*taiwan', 'i')
