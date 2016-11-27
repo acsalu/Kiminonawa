@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- '0.11'
+- '0.10'
+before_install:
+- gem install crxmake --quiet
+script:
+- echo "No test at this point"
+after_success:
+- crxmake --pack-extension='.' --extension-output='$TRAVIS_BUILD_DIR/Kiminonawa.crx'
+deploy:
+  provider: releases
+  api_key: $GITHUB_OAUTH_TOKEN
+  file: '$TRAVIS_BUILD_DIR/Kiminonawa.crx'
+  skip_cleanup: true
+  on:
+      tags: true
+env:
+  global:
+    secure: bj4vPvx14Xwm2gR2KAIG/8j9TVux5Hj9cvlBmyFJxC8ZjgrYYn7jJ7spEZnMqUmy1PCjcJveCeUTt2EZ2wKjnelG+PyxdXZznT2jDqo3X8rnQnHBHtfXRs9W9dXJFJWd8otldiK4vgLHbtX8Yhl1LW5azh14PlWuXvmM4KxnLDeMrrH5pQnEs96yTtvrkwZloSAbaHEdBBvRGJgVHk+h1JTlBciKtIn66XUl0a6FizBluNiiRASPvB/6Ho9mznKvhC++YQ7+wpR9hkpzh1Mk/VtSIjQJIkfOI8F+YMrgVumY5Gws7zWXrNOT+Nm4q7jhI3fPNiI9RrTccnecY1P3evU3FOqpmHImP/bakapwsiG9Dr5k4CnlP5qCLfTNrM8ZtZL8U+sFHX09hITlbzUHQJ6BNn3eGXx9NT57IaO7685N2+fJYHkWpmng0+FcSSWhgSnb7yuZUuv5b54Ezdxqc6cmI24FeK2VkxPhwv05HyYtV3JFk5BCd3FZ5ie+1k/YWaaE9tj4/qAebrkMkAkuBMgxQNA33o7JGbbsn4IMujY7bZAvJMhv1fm9XRpOgPhS/D5rPXjYRo7TUMPfAC2kOJPK/DDAi6i7NAwRvUPuHVaLXhxPoYy/nr9AY38q6yIxPnpzqhvkfJhOW6V/bHuvMQJZD3P+P5NWOzV9oxsrw8s=
